@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vinutha@sre:~$</title>
+  <meta name="description" content="Vinutha Ambekar Prakash — Senior Site Reliability Engineer">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0d1117;
+      --bg-term:     #161b22;
+      --bg-bar:      #21262d;
+      --green:       #39d353;
+      --green-hi:    #7ee787;
+      --blue:        #58a6ff;
+      --yellow:      #e3b341;
+      --purple:      #bc8cff;
+      --red:         #f85149;
+      --text:        #c9d1d9;
+      --dim:         #6e7681;
+      --border:      #30363d;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'JetBrains Mono', 'Courier New', Courier, monospace;
+      font-size: 14px;
+      line-height: 1.75;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* ── Terminal chrome ── */
+    .window {
+      background: var(--bg-term);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0,0,0,.75), 0 0 0 1px rgba(255,255,255,.04);
+    }
+
+    .bar {
+      background: var(--bg-bar);
+      padding: 11px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+      user-select: none;
+    }
+
+    .dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #febc2e; }
+    .dot-g { background: #28c840; }
+
+    .bar-title {
+      flex: 1;
+      text-align: center;
+      color: var(--dim);
+      font-size: 12px;
+    }
+
+    .body { padding: 2.5rem 3rem 3.5rem; }
+
+    /* ── ASCII banner ── */
+    .banner {
+      color: var(--green);
+      font-size: 11.5px;
+      line-height: 1.15;
+      white-space: pre;
+      overflow-x: auto;
+      margin-bottom: .75rem;
+    }
+
+    .subtitle {
+      color: var(--dim);
+      font-size: 12px;
+      margin-bottom: 3rem;
+    }
+    .subtitle .loc { color: var(--yellow); }
+
+    /* ── Prompt ── */
+    .block { margin-top: 2.25rem; }
+
+    .prompt {
+      margin-bottom: .6rem;
+      white-space: nowrap;
+    }
+    .u  { color: var(--green-hi); font-weight: 700; }
+    .at { color: var(--dim); }
+    .h  { color: var(--blue);     font-weight: 700; }
+    .co { color: var(--dim); }
+    .p  { color: var(--purple); }
+    .dl { color: var(--dim); }
+    .cm { color: var(--text); }
+
+    /* ── Output ── */
+    .out { padding-left: .25rem; }
+
+    /* Summary */
+    .summary { max-width: 780px; color: var(--text); }
+    .hl { color: var(--green-hi); font-weight: 700; }
+
+    /* Skills */
+    .skills { display: grid; gap: .35rem; }
+    .srow   { display: flex; flex-wrap: wrap; gap: 0 .1rem; }
+    .sk     { color: var(--blue); min-width: 280px; flex-shrink: 0; }
+    .sv     { color: var(--yellow); }
+
+    /* Career */
+    .job { margin-bottom: 2rem; }
+
+    .jhead {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: .2rem;
+      margin-bottom: .4rem;
+    }
+    .jco   { color: var(--green-hi); font-weight: 700; }
+    .jrole { color: var(--blue); }
+    .jdate { color: var(--dim); font-style: italic; }
+
+    .job ul { list-style: none; padding: 0; }
+    .job li {
+      position: relative;
+      padding-left: 1.6rem;
+      margin-bottom: .35rem;
+      color: var(--text);
+    }
+    .job li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--green);
+    }
+
+    .n { color: var(--yellow); font-weight: 700; }
+
+    /* Education */
+    .edu { margin-bottom: 1.1rem; }
+    .sch  { color: var(--green-hi); font-weight: 700; }
+    .deg  { color: var(--text); }
+    .emeta{ color: var(--dim); font-size: 12px; }
+
+    /* Contact */
+    .contact { display: grid; gap: .35rem; }
+    .crow { display: flex; gap: 0; }
+    .ck { color: var(--blue);   min-width: 130px; flex-shrink: 0; }
+    .ceq{ color: var(--dim);    margin: 0 .4rem; }
+    .cv { color: var(--text); }
+    .cv a { color: var(--green-hi); text-decoration: none; }
+    .cv a:hover { text-decoration: underline; }
+
+    /* Blinking cursor */
+    .cursor {
+      display: inline-block;
+      width: 9px;
+      height: 1.05em;
+      background: var(--green);
+      vertical-align: text-bottom;
+      animation: blink 1.2s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* Divider between jobs */
+    .jdivider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 1.5rem 0;
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      color: var(--dim);
+      font-size: 11px;
+      text-align: center;
+    }
+
+    /* Responsive */
+    @media (max-width: 680px) {
+      body   { padding: .5rem; font-size: 12px; }
+      .body  { padding: 1.25rem 1rem 2rem; }
+      .banner{ font-size: 7.5px; }
+      .sk    { min-width: 100%; }
+      .jhead { flex-direction: column; }
+      .ck    { min-width: 90px; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+<div class="window">
+
+  <!-- Title bar -->
+  <div class="bar">
+    <span class="dot dot-r"></span>
+    <span class="dot dot-y"></span>
+    <span class="dot dot-g"></span>
+    <span class="bar-title">vinutha@sre-portfolio — zsh — 120×40</span>
+  </div>
+
+  <div class="body">
+
+    <!-- ASCII name banner -->
+    <pre class="banner">
+ __   __ ___ _  _ _   _ _____ _  _   _
+ \ \ / /|_ _| \| | | | |_   _| || | /_\
+  \ V /  | || .` | |_| | | | | __ |/ _ \
+   \_/  |___|_|\_|\___/  |_| |_||_/_/ \_\
+    </pre>
+    <div class="subtitle">
+      # Ambekar Prakash &nbsp;·&nbsp; Senior Site Reliability Engineer &nbsp;·&nbsp;
+      <span class="loc">Sunnyvale, CA</span>
+    </div>
+
+    <!-- whoami -->
+    <div class="block">
+      <div class="prompt">
+        <span class="u">vinutha</span><span class="at">@</span><span class="h">sre</span><span class="co">:</span><span class="p">~</span><span class="dl"> $ </span><span class="cm">whoami</span>
+      </div>
+      <div class="out">
+        <p class="summary">
+          Senior Site Reliability Engineer / DevOps Engineer with <span class="hl">7+ years</span> of experience
+          building and operating <span class="hl">Kubernetes-based production platforms</span> across
+          <span class="hl">AWS, Azure, and GCP</span>. Strong background in
+          <span class="hl">CI/CD automation</span>, infrastructure as code,
+          <span class="hl">Python-based operational tooling</span>, and SRE reliability practices.
+          Experienced in improving <span class="hl">developer productivity</span>, designing
+          <span class="hl">self-healing infrastructure</span>, and supporting large-scale distributed systems.
+          Proven track record of <span class="hl">zero-downtime releases</span>, incident management, and
+          automation-driven DevOps workflows.
+        </p>
+      </div>
+    </div>
+
+    <!-- printenv STACK -->
+    <div class="block">
+      <div class="prompt">
+        <span class="u">vinutha</span><span class="at">@</span><span class="h">sre</span><span class="co">:</span><span class="p">~</span><span class="dl"> $ </span><span class="cm">printenv STACK</span>
+      </div>
+      <div class="out skills">
+        <div class="srow">
+          <span class="sk">CLOUD_AND_KUBERNETES</span>
+          <span class="sv">="AWS EKS · Azure AKS · GCP GKE · Kubernetes · Docker · Containerd"</span>
+        </div>
+        <div class="srow">
+          <span class="sk">INFRA_AS_CODE</span>
+          <span class="sv">="Terraform · Ansible · Helm · Packer"</span>
+        </div>
+        <div class="srow">
+          <span class="sk">CI_CD_AND_AUTOMATION</span>
+          <span class="sv">="Spinnaker · Jenkins · GitHub Actions · GitLab CI · Azure DevOps · Git · Nexus · SonarQube"</span>
+        </div>
+        <div class="srow">
+          <span class="sk">OBSERVABILITY_AND_MONITORING</span>
+          <span class="sv">="Prometheus · Grafana · Splunk · Dynatrace APM · OpenObserve"</span>
+        </div>
+        <div class="srow">
+          <span class="sk">LANGUAGES</span>
+          <span class="sv">="Python · Shell Scripting · JavaScript"</span>
+        </div>
+        <div class="srow">
+          <span class="sk">DATABASES</span>
+          <span class="sv">="SQL Server · MySQL · MongoDB · DynamoDB · Cassandra"</span>
+        </div>
+        <div class="srow">
+          <span class="sk">RELIABILITY_PRACTICES</span>
+          <span class="sv">="SLO/SLA/SLI · Incident Command · DR · HA · Self-Healing · Capacity Planning · Chaos Engineering"</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Career -->
+    <div class="block">
+      <div class="prompt">
+        <span class="u">vinutha</span><span class="at">@</span><span class="h">sre</span><span class="co">:</span><span class="p">~</span><span class="dl"> $ </span><span class="cm">ls -lt ~/career/</span>
+      </div>
+      <div class="out">
+
+        <!-- Walmart Senior SRE -->
+        <div class="job">
+          <div class="jhead">
+            <span><span class="jco">Walmart Global Tech</span> &nbsp;·&nbsp; <span class="jrole">Senior Site Reliability Engineer</span></span>
+            <span class="jdate">Sep 2023 – Present</span>
+          </div>
+          <ul>
+            <li>Supported <span class="n">100+</span> P1–P3 incidents through structured triage, cross-team coordination, and escalation management — preventing <span class="n">$20M+</span> in potential revenue loss across Walmart's global e-commerce operations.</li>
+            <li>Engineered and launched an <span class="hl">AI-powered service-discovery platform</span> (Python/Flask + OpenAI API) for intelligent incident triage — providing centralized access to Grafana &amp; OpenObserve triage links, communication channels, and service-to-component mapping to reduce MTTR during P0/P1 incidents.</li>
+            <li>Collaborated with <span class="n">30+</span> application engineering teams to collect golden signal metrics (latency, traffic, errors, saturation) and onboard T0–T2 alerts across infrastructure, application, and RUM layers — achieving end-to-end observability coverage.</li>
+            <li>Led vendor management and incident command operations — real-time contact directories for P0–P3 war room escalations, biweekly reliability deep dives, and postmortems sustaining improvements in MTTD and MTTM.</li>
+          </ul>
+        </div>
+
+        <hr class="jdivider">
+
+        <!-- Lumen -->
+        <div class="job">
+          <div class="jhead">
+            <span><span class="jco">Lumen Technologies</span> &nbsp;·&nbsp; <span class="jrole">Infrastructure Engineer Intern</span></span>
+            <span class="jdate">Jun 2023 – Aug 2023</span>
+          </div>
+          <ul>
+            <li>Reduced infrastructure provisioning time from days to hours and increased deployment velocity by <span class="n">20%</span> by delivering reusable Terraform IaC modules on GCP to manage <span class="n">25+</span> projects automatically.</li>
+            <li>Cut outdated dependencies by <span class="n">30%</span> and strengthened security posture across <span class="n">7</span> GCP services by building centralized Terraform modules with automated dependency updates via custom shell scripts.</li>
+          </ul>
+        </div>
+
+        <hr class="jdivider">
+
+        <!-- Walmart SRE -->
+        <div class="job">
+          <div class="jhead">
+            <span><span class="jco">Walmart Global Tech</span> &nbsp;·&nbsp; <span class="jrole">Site Reliability Engineer</span></span>
+            <span class="jdate">Apr 2020 – Aug 2022</span>
+          </div>
+          <ul>
+            <li>Achieved <span class="n">0% downtime</span> during Black Friday peak traffic — the highest-revenue retail event of the year — by leading SRE readiness strategy and incident response protocols across <span class="n">10–50</span> business-critical microservices, earning org-wide recognition for reliability excellence.</li>
+            <li>Improved application performance by <span class="n">15%</span> and reduced infrastructure waste by <span class="n">5%</span> by onboarding <span class="n">100+</span> servers to Dynatrace APM with SLI-based alerting across a multi-cloud, multi-region Kubernetes platform spanning <span class="n">500+ nodes</span>, 3 Azure regions, and GCP.</li>
+            <li>Designed and operated a cloud-agnostic Kubernetes infrastructure supporting <span class="n">200+</span> microservices across 10–50 teams, with automated provisioning, horizontal auto-scaling, and cross-region failover — processing millions of requests per day.</li>
+            <li>Elevated L1/L2 on-call readiness by mentoring <span class="n">10+</span> operations engineers on SRE principles, incident response protocols, and reliability best practices.</li>
+          </ul>
+        </div>
+
+        <hr class="jdivider">
+
+        <!-- Accenture -->
+        <div class="job">
+          <div class="jhead">
+            <span><span class="jco">Accenture</span> &nbsp;·&nbsp; <span class="jrole">DevOps Engineer</span></span>
+            <span class="jdate">Nov 2018 – Mar 2020</span>
+          </div>
+          <ul>
+            <li>Improved deployment reliability and reduced release cycle time across <span class="n">25–50</span> applications by architecting end-to-end Kubernetes-based CI/CD pipelines for Salesforce, Java/Spring Boot, Python, and Big Data workloads.</li>
+            <li>Eliminated manual deployment steps for ASP.NET applications by automating Windows node provisioning using Spinnaker and Helm on Kubernetes clusters.</li>
+          </ul>
+        </div>
+
+        <hr class="jdivider">
+
+        <!-- Capgemini -->
+        <div class="job">
+          <div class="jhead">
+            <span>
+              <span class="jco">Capgemini</span> &nbsp;·&nbsp;
+              <span class="jrole">Site Reliability Engineer</span>
+              <span class="jdate"> &nbsp;·&nbsp; Client: Cisco / Hewlett Packard</span>
+            </span>
+            <span class="jdate">Aug 2016 – Oct 2018</span>
+          </div>
+          <ul>
+            <li>Ensured <span class="n">24/7</span> SLA compliance and zero missed release windows across thousands of SOX/non-SOX production applications by leading Go-Live releases and incident support across GCP, AWS, OpenShift, and OpenStack.</li>
+            <li>Accelerated cloud-native deployment velocity across <span class="n">15–30</span> engineering teams by implementing Spinnaker Pipeline-as-Code and Infra-as-Code practices, standardising release workflows across multi-cloud environments.</li>
+            <li>Reduced manual intervention and improved platform MTTR by authoring P0/P1 runbooks and implementing self-healing automation for key production workflows.</li>
+            <li>Improved cloud infrastructure reliability by <span class="n">30%</span> and maintained <span class="n">100% uptime</span> by scaling VMware infrastructure from 100+ to 200+ VMs on HPE cloud using ESXi hypervisors.</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Education -->
+    <div class="block">
+      <div class="prompt">
+        <span class="u">vinutha</span><span class="at">@</span><span class="h">sre</span><span class="co">:</span><span class="p">~</span><span class="dl"> $ </span><span class="cm">ls ~/education/</span>
+      </div>
+      <div class="out">
+        <div class="edu">
+          <div class="sch">Northeastern University</div>
+          <div class="deg">Master of Science in Software Engineering Systems</div>
+          <div class="emeta">GPA: 3.7 &nbsp;·&nbsp; Graduated Apr 2024</div>
+        </div>
+        <div class="edu">
+          <div class="sch">Visvesvaraya Technological University</div>
+          <div class="deg">Bachelor of Engineering in Computer Science and Engineering</div>
+          <div class="emeta">GPA: 3.7 &nbsp;·&nbsp; Graduated Jun 2016</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="block">
+      <div class="prompt">
+        <span class="u">vinutha</span><span class="at">@</span><span class="h">sre</span><span class="co">:</span><span class="p">~</span><span class="dl"> $ </span><span class="cm">cat ~/.contact</span>
+      </div>
+      <div class="out contact">
+        <div class="crow">
+          <span class="ck">email</span><span class="ceq">=</span>
+          <span class="cv"><a href="mailto:vinutha.ap07@gmail.com">vinutha.ap07@gmail.com</a></span>
+        </div>
+        <div class="crow">
+          <span class="ck">phone</span><span class="ceq">=</span>
+          <span class="cv"><a href="tel:+16177085657">617-708-5657</a></span>
+        </div>
+        <div class="crow">
+          <span class="ck">location</span><span class="ceq">=</span>
+          <span class="cv">Sunnyvale, CA</span>
+        </div>
+        <div class="crow">
+          <span class="ck">linkedin</span><span class="ceq">=</span>
+          <span class="cv"><a href="https://linkedin.com/in/vinuthaprakash" target="_blank" rel="noopener">linkedin.com/in/vinuthaprakash</a></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live cursor -->
+    <div class="block">
+      <div class="prompt">
+        <span class="u">vinutha</span><span class="at">@</span><span class="h">sre</span><span class="co">:</span><span class="p">~</span><span class="dl"> $ </span><span class="cursor"></span>
+      </div>
+    </div>
+
+    <div class="footer">
+      © 2026 Vinutha Ambekar Prakash &nbsp;·&nbsp; Built in a terminal
+    </div>
+
+  </div><!-- /body -->
+</div><!-- /window -->
+</div><!-- /wrap -->
+</body>
+</html>
